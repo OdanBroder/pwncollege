@@ -1,1 +1,1 @@
-# writeup_pwncollege
+No love no life
