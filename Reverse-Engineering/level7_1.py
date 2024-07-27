@@ -1,0 +1,17 @@
+hex = [0x0C4, 0x9C, 0x70, 0x0C1, 0x89, 0x74, 0x0C2, 0x82, 0x7A, 0x0CC, 0x86, 0x78, 0x0C9, 0x81, 0x7D, 0x0CD, 0x83, 0x63, 0x0D5, 0x8E, 0x62, 0x0D1, 0x99, 0x64, 0xDD ]
+
+for i in range(len(hex)):
+    if(i % 3 == 2):
+        hex[i] = hex[i] ^ 0x13
+    elif(i % 3 == 1):
+        hex[i] = hex[i] ^ 0xEC
+    elif(i % 3 == 0):
+        hex[i] = hex[i] ^ 0xA5
+
+for i in range(24):
+    for j in range(24 - i):
+        if(hex[j] > hex[j + 1]):
+            hex[j], hex[j + 1] = hex[j + 1], hex[j]
+ 
+for i in range(len(hex)):
+    print(chr(hex[i]), end='')
