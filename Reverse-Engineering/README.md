@@ -110,7 +110,7 @@ for i in range(len(hex)):
 +Xor value at odd index with 0xBA and even index at 0x5E.
 
 
-### [Script](https://github.com/BabyBroder/pwncollege/blob/Program-Security/Reverse-Engineering/level6.py)
+### [Script](https://github.com/BabyBroder/pwncollege/blob/Program-Security/Reverse-Engineering/level6_1.py)
 # Level 7
 
 ## 7.1
