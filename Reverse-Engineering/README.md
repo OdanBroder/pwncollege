@@ -2615,7 +2615,7 @@ It takes the byte instruction to call the respective function.
 I spent many times thinking about the approach to solving this level and writing a script for it.
 
 
-### [Script](https://github.com/BabyBroder/pwncollege/blob/Program-Security/Reverse-Engineering/level19.py)
+### [Script DEBUG](https://github.com/BabyBroder/pwncollege/blob/Program-Security/Reverse-Engineering/level19_DEBUG.py)
 
 ```antlr4=
 [+] v1 @ 0xb6
@@ -3064,3 +3064,10 @@ Here, I will conclude my supposition and guess the work of compare.
 
 - This loop is has the rule, I follow with this and have the license key.
 
+### [Script](https://github.com/BabyBroder/pwncollege/blob/Program-Security/Reverse-Engineering/level19.py)
+
+## 19.1 
+
+### [Script DEBUG](https://github.com/BabyBroder/pwncollege/blob/Program-Security/Reverse-Engineering/level19_1_DEBUG.py)
+
+### [Script](https://github.com/BabyBroder/pwncollege/blob/Program-Security/Reverse-Engineering/level19_1.py)
