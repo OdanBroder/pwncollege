@@ -1,6 +1,20 @@
 #!/usr/bin/env python3
 from pwn import *
 
+#context.log_level = 'debug'
+context.binary = elf = ELF('/challenge/babyrev_level19.1', checksec=False)
+
+#libc = ELF('', checksec=False)
+libc = elf.libc 
+
+gs = """
+b *main
+"""
+
+def info(mess):
+    return log.info(mess)#!/usr/bin/env python3
+from pwn import *
+
 context.log_level = "debug"
 context.binary = elf = ELF("/challenge/babyrev_level19.1", checksec=False)
 
@@ -56,10 +70,6 @@ aAbcdsif = 0x555555557024
 """
 flag_description = 0x555555559300
 flag_description_arr = [None] * 8
-
-index_flag = 11
-flag = [0] * 12
-index_loop = 0
 
 dic_dest = {
     dest_sub_0x20 + 0x020 : int("0x8", 16) ,                
@@ -1030,23 +1040,9 @@ def interpret_ldm(a1, a2_hex_arr):
 def interpret_cmp(a1, a2_hex_arr):
     info("CMP")
     global a1_1024
-    global index_flag
-    global index_loop
-    global flag
-    
     v2 = describe_register(a2_hex_arr[1])
     v3 = describe_register(a2_hex_arr[2])
     print(f"[s] CMP {chr(table_aAbcdsif(v3))} = {chr(table_aAbcdsif(v2))}")
-
-    if table_aAbcdsif(v3) == 0x61 and table_aAbcdsif(v2) == 0x62 and index_loop == 11 - index_flag:
-        flag[index_flag] = a1_1024[1]
-        index_flag -= 1
-        success(f"Find key at index {index_flag + 1} : {a1_1024[1]}")
-        success(f"FLAG @ {flag}")
-        sleep(2)
-        
-    if table_aAbcdsif(v3) == 0x61 and table_aAbcdsif(v2) == 0x62:
-        index_loop += 1
 
     v5 = read_register(a1, a2_hex_arr[2])
     v6 = read_register(a1, a2_hex_arr[1])
@@ -1107,10 +1103,26 @@ def interpret_sys(a1, a2_hex_arr):
         if 256 - a1_1024[1] <= v6:
             v6 = -a1_1024[1]
 
-        for i in range (len(flag)):
-            a1_arr[a1_1024[1] + i + 768] = flag[i]
+        read_input = input("input: ")[:v6] 
+        for i in range(len(read_input)):
+            a1_arr[a1_1024[1] + i + 768] = ord(read_input[i])
+
+        a1_arr[a1_1024[1] + len(read_input) + 768] = 0x27
+        a1_arr[a1_1024[1] + len(read_input) - 1 + 768] = 0xcc
+        a1_arr[a1_1024[1] + len(read_input) - 2 + 768] = 0x4e
+        a1_arr[a1_1024[1] + len(read_input) - 3 + 768] = 0x3a
+        a1_arr[a1_1024[1] + len(read_input) - 4 + 768] = 0x91
+        a1_arr[a1_1024[1] + len(read_input) - 5 + 768] = 0x40
+        a1_arr[a1_1024[1] + len(read_input) - 6 + 768] = 0x75
+        a1_arr[a1_1024[1] + len(read_input) - 7 + 768] = 0x3a
+        a1_arr[a1_1024[1] + len(read_input) - 8 + 768] = 0xba
+        a1_arr[a1_1024[1] + len(read_input) - 9 + 768] = 0x5a
+        a1_arr[a1_1024[1] + len(read_input) - 10 + 768] = 0x3
+        a1_arr[a1_1024[1] + len(read_input) - 11 + 768] = 0xcf
+        a1_arr[a1_1024[1] + len(read_input) - 12 + 768] = 0xba
+        a1_arr[a1_1024[1] + len(read_input) - 13 + 768] = 0x8d
         
-        write_register(a1, a2_hex_arr[1], len(flag))
+        write_register(a1, a2_hex_arr[1], len(read_input))
 
     if (a2_and_option & 0x4) != 0:
         print("[s] ... write")
@@ -1124,7 +1136,7 @@ def interpret_sys(a1, a2_hex_arr):
 
     if (a2_and_option & 0x2) != 0:
         print("[s] ... exit")
-        return 0xdeadbeef
+        exit(a1_1024[0])
 
     if a2_hex_arr[1]:
         v12 = read_register(a1, a2_hex_arr[1])
@@ -1191,26 +1203,35 @@ def interpreter_loop(a1):
         x = a1_arr[3 * v1] | (a1_arr[3 * v1 + 1] << 8)
         y = a1_arr[3 * v1 + 2] << 16
         success("x | y @ " + hex(x | y))
-        check = interpret_instruction(a1, x | y)
-        if check == 0xdeadbeef:
-            return check
-        if index_flag == -1:
-            return flag
+        interpret_instruction(a1, x | y)
 
 
-while True:
-    index_loop = 0
-    a1_arr = [0] * 1024
-    a1_1024 = [0] * 10
-    memcpy_dest_vmcode(dest, dic_dest)
-    check = interpreter_loop(a1)
-    if check != 0xdeadbeef:
-        print(flag)
-        break    
-    
-license_key = b''
-for num in flag:
-    license_key += num.to_bytes(1, 'big')
+memcpy_dest_vmcode(dest, dic_dest)
+print_arr()
+interpreter_loop(a1)
+
+
+
+
+
+def success(mess):
+    return log.success(mess)
+
+def error(mess):
+    log.error(mess)
+
+
+def start():
+    if args.GDB:
+        return gdb.debug(elf.path, env={"LD_PRELOAD": libc.path},gdbscript=gs)
+    elif args.REMOTE:
+        return remote('', )
+    else:
+        return process(elf.path, env={"LD_LIBRARY_PATH": libc.path})
+
+
+payload = b'\xcf' + b'\x03' + b'\x5a' + b'\xba' + b'\x3a' + b'\x75' +b'\x40' + b'\x91' + b'\x3a' + b'\x4e' + b'\xcc' + b'\x27'
+print(len(payload))
 io = start()
-io.sendafter(b'KEY: ', license_key)
+io.sendafter(b'KEY: ', payload)
 io.interactive()

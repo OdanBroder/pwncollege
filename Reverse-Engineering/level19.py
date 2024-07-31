@@ -998,7 +998,7 @@ def interpret_cmp(a1, a2_hex_arr):
     if table_aAbcdsif(v3) == 0x61 and table_aAbcdsif(v2) == 0x62 and index_loop == 11 - index_flag:
         flag[index_flag] = a1_1024[1]
         index_flag -= 1
-        success(f"Find key at index {index_flag} : {a1_1024[1]}")
+        success(f"Find key at index {index_flag + 1} : {a1_1024[1]}")
         success(f"FLAG @ {flag}")
         sleep(2)
         

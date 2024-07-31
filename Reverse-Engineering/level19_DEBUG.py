@@ -2,7 +2,7 @@
 from pwn import *
 
 context.log_level = "debug"
-context.binary = elf = ELF("./babyrev_level19.0", checksec=False)
+context.binary = elf = ELF("/challenge/babyrev_level19.0", checksec=False)
 
 libc = elf.libc
 
