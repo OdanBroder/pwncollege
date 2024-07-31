@@ -2,7 +2,7 @@
 from pwn import *
 
 context.log_level = "debug"
-context.binary = elf = ELF("/challenge/babyrev_level19.0", checksec=False)
+context.binary = elf = ELF("./babyrev_level19.0", checksec=False)
 
 libc = elf.libc
 
@@ -53,10 +53,6 @@ aAbcdsif = 0x555555557024
 """
 flag_description = 0x555555559300
 flag_description_arr = [None] * 8
-
-index_flag = 11
-flag = [0] * 12
-index_loop = 0
 
 dic_dest = {
         dest_sub_0x20+0x020 : int("0x40", 16),
@@ -780,6 +776,34 @@ def table_aAbcdsif(value):
         error("table_aAbcdsif error!!" + hex(value))
 
 
+def print_a1_arr():
+    global a1_arr
+    for i in range(len(a1_arr)):
+        if a1_arr[i] != None:
+            print(f"a1[{i}] = {a1_arr[i]}", end=" ")
+
+
+def print_a1_1024():
+    global a1_1024
+    for i in range(len(a1_1024)):
+        try:
+            print(f"a1[{1024 + i}] = " + str(hex(a1_1024[i])), end=" ")
+        except:
+            print(a1_1024[i], end=" ")
+
+
+def print_arr():
+    print_a1_1024()
+    print("\n")
+    #print_a1_arr()
+    #print("\n")
+
+def print_arr_all():
+    print_a1_1024()
+    print("\n")
+    print_a1_arr()
+    print("\n")
+
 def describe_register(str):
     global aAbcdsif
     if str == 2:
@@ -918,7 +942,7 @@ def interpret_imm(a1, a2_hex_arr):
     v2 = describe_register(a2_hex_arr[2])
     print(f"IMM {chr(table_aAbcdsif(v2))} = {hex(a2_hex_arr[1])}")
     write_register(a1, a2_hex_arr[2], a2_hex_arr[1])
-    
+    print_arr()
 
 
 def interpret_add(a1, a2_hex_arr):
@@ -934,7 +958,7 @@ def interpret_add(a1, a2_hex_arr):
     else:
         sum = v2 + v4
     write_register(a1, a2_hex_arr[2], sum)
-    
+    print_arr()
 
 def interpret_stk(a1, a2_hex_arr):
     info("STK")
@@ -960,6 +984,7 @@ def interpret_stk(a1, a2_hex_arr):
         result = a1
         a1_1024[4] -= 1
     
+    print_arr()
     return result
 
 def interpret_stm(a1, a2_hex_arr):
@@ -970,7 +995,7 @@ def interpret_stm(a1, a2_hex_arr):
     v2 = read_register(a1, a2_hex_arr[1])
     v4 = read_register(a1, a2_hex_arr[2])
     write_memory(a1, v4, v2)
-
+    print_arr()
 
 def interpret_ldm(a1, a2_hex_arr):
     info("LDM")
@@ -982,28 +1007,14 @@ def interpret_ldm(a1, a2_hex_arr):
     info("v4 @ " + hex(v4))
     info("memory @ " + hex(memory))
     write_register(a1, a2_hex_arr[2], memory)
-    
+    print_arr()
 
 def interpret_cmp(a1, a2_hex_arr):
     info("CMP")
     global a1_1024
-    global index_flag
-    global index_loop
-    global flag
-    
     v2 = describe_register(a2_hex_arr[1])
     v3 = describe_register(a2_hex_arr[2])   
     print(f"[s] CMP {chr(table_aAbcdsif(v3))} = {chr(table_aAbcdsif(v2))}")
-    
-    if table_aAbcdsif(v3) == 0x61 and table_aAbcdsif(v2) == 0x62 and index_loop == 11 - index_flag:
-        flag[index_flag] = a1_1024[1]
-        index_flag -= 1
-        success(f"Find key at index {index_flag} : {a1_1024[1]}")
-        success(f"FLAG @ {flag}")
-        sleep(2)
-        
-    if table_aAbcdsif(v3) == 0x61 and table_aAbcdsif(v2) == 0x62:
-        index_loop += 1
     
     v5 = read_register(a1, a2_hex_arr[2])
     v6 = read_register(a1, a2_hex_arr[1])
@@ -1027,7 +1038,7 @@ def interpret_cmp(a1, a2_hex_arr):
         result = a1
         a1_1024[6] |= 0x1
     
-    
+    print_arr()
     return result       
 
 def interpret_jmp(a1, a2_hex_arr):
@@ -1038,19 +1049,17 @@ def interpret_jmp(a1, a2_hex_arr):
     print(f"[j] JMP {table_describe_flags()} {chr(table_aAbcdsif(v2))}")   
     
     if a2_hex_arr[2] != 0  and a2_hex_arr[2] & a1_1024[6] == 0:
-        
+        print_arr()
         return print("[j] ... NOT TAKEN")
     
     print("[j] ... TAKEN")
     
     result = read_register(a1, a2_hex_arr[1])
     a1_1024[5] = result
-    
+    print_arr()
     return result
     
 def interpret_sys(a1, a2_hex_arr):
-    global flag
-    global index_flag
     info("SYS")    
     
     v2 = describe_register(a2_hex_arr[1])
@@ -1064,10 +1073,11 @@ def interpret_sys(a1, a2_hex_arr):
         if (256 - a1_1024[1] <= v6):
             v6 = -a1_1024[1]
             
-        for i in range (len(flag)):
-            a1_arr[a1_1024[1] + i + 768] = flag[i]
+        read_input = input("input: ")[:v6]
+        for i in range (len(read_input)):
+            a1_arr[a1_1024[1] + i + 768] = ord(read_input[i])
         
-        write_register(a1, a2_hex_arr[1], len(flag))
+        write_register(a1, a2_hex_arr[1], len(read_input))
     
     if((a2_and_option & 0x4) != 0):
         print("[s] ... write")
@@ -1081,7 +1091,7 @@ def interpret_sys(a1, a2_hex_arr):
     
     if((a2_and_option & 0x1) != 0):
         print("[s] ... exit")
-        return 0xdeadbeef
+        exit(a1_1024[0])
     
     if(a2_hex_arr[1]):
         v12 = read_register(a1, a2_hex_arr[1])
@@ -1089,9 +1099,9 @@ def interpret_sys(a1, a2_hex_arr):
         print(
             f"[s] ... return value (in register {chr(table_aAbcdsif(v13))}): {hex(v12)}\n"
         )
-        return 
+        return print_arr()
     
-    
+    print_arr()
     return result  
 
 def interpret_instruction(a1, a2):
@@ -1138,33 +1148,16 @@ def interpret_instruction(a1, a2):
 def interpreter_loop(a1):
     global a1_arr
     global a1_1024
-    global index_loop
     print("[+] Starting interpreter loop! Good luck!")
     while True:
         v1 = a1_1024[5]
         a1_1024[5] = v1 + 1
+        success("v1 @ " + hex(v1))
         x = a1_arr[3 * v1] | (a1_arr[3 * v1 + 1] << 8)
         y = (a1_arr[3 * v1 + 2] << 16)
-        check = interpret_instruction(a1, x | y)
-        if check == 0xdeadbeef:
-            return check
-        if index_flag == -1:
-            return flag
+        success("x | y @ " + hex(x | y))
+        interpret_instruction(a1, x | y)
 
-while True:
-    index_loop = 0
-    a1_arr = [0] * 1024
-    a1_1024 = [0] * 10
-    memcpy_dest_vmcode(dest, dic_dest)
-    check = interpreter_loop(a1)
-    if check != 0xdeadbeef:
-        print(flag)
-        break    
-    
-license_key = b''
-for num in flag:
-    license_key += num.to_bytes(1, 'big')
-
-io = start()
-io.sendafter(b'[s] ... read_memory\n', license_key)
-io.interactive()
+memcpy_dest_vmcode(dest, dic_dest)
+print_arr()
+interpreter_loop(a1)
