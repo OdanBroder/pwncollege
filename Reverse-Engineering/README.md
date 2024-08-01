@@ -3078,7 +3078,7 @@ Here, I will conclude my supposition and guess the work of compare.
 
 In this level, vm_mem is not empty.
 
-![vm_mem](images/Level20/20.0/vm_mem.png)
+![vm_mem](images/Level20/vm_mem.png)
 
 ```antlr4=
 [+] v1 @ 0xdc
