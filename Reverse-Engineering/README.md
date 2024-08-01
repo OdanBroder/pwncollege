@@ -3,7 +3,7 @@
 
 You only use strings command and check correct input.
 
-![image](https://hackmd.io/_uploads/HJdINGDCp.png)
+![key](images/Level1/key.png)
 
 ## 1.1
 It is similar to level 1.0
@@ -58,7 +58,7 @@ Use IDA to read key.
 
 ## 5.0
 -Use IDA to read expected result:
-![image](https://hackmd.io/_uploads/r19oId0A6.png)
+![Expected Result](images/Level5/expected_result.png)
 ```cpp=
   for ( j = 0; j <= 4; ++j )
     *((_BYTE *)&buf + j) ^= 0x88u;
@@ -326,7 +326,7 @@ void __fastcall __noreturn main(int a1, char **a2, char **a3)
 
 ### Approach
 
-:::spoiler
+
 ```antlr4=
    0x555555555ed6:      endbr64
    0x555555555eda:      push   rbp
@@ -496,15 +496,15 @@ void __fastcall __noreturn main(int a1, char **a2, char **a3)
    0x55555555621e:      mov    edi,0x1
    0x555555556223:      call   0x5555555551c0 <exit@plt>
 ```
-:::
+
 
 The challenge allows me to change the value at the address starting from the address of v8.
 
-![image](https://hackmd.io/_uploads/rk2RR3yP0.png)
+![v8](images/Level9/v8.png)
 
-![image](https://hackmd.io/_uploads/BymlyaJwC.png)
+![tele 20](images/Level9/tele20.png)
 
-![image](https://hackmd.io/_uploads/Sk0gyTJP0.png)
+![index](images/Level9/index.png)
 
 It gives me five times to change one byte -> I can change a maximum 10 bytes; however, memcmp compares with the length of 0x1A. Therefore, the idea of changing my buf to a key value is impossible.
 
@@ -514,7 +514,7 @@ It gives me five times to change one byte -> I can change a maximum 10 bytes; ho
 !mprotect((void *)((v3 << 12) + v8), 0x1000uLL, 7)
 ```
 
-![image](https://hackmd.io/_uploads/ry7_l6kwR.png)
+![vmmap](images/Level9/vmmap.png)
 
 - So, I can change the assembly code =)))).
 - I will change it to je instead of jne to trigger.
@@ -638,21 +638,21 @@ void __fastcall __noreturn main(int a1, char **a2, char **a3)
 If you use the same approach as the before level in the first change, you will get the segmentation fault.
 
 ***Solution***
-:::spoiler
-![image](https://hackmd.io/_uploads/HkfR7IGDR.png)
+
+![dump ins](images/Level11/dump_instruction.png)
 - As you can see, this is totally different from the challenge before.
 
 [Online x86 / x64 Assembler and Disassembler](https://defuse.ca/online-x86-assembler.htm#disassembly)
-![image](https://hackmd.io/_uploads/H1ZVVLMvA.png)
+![Disassembly](images/Level11/disassembly.png)
 - When I disassemble, I see that assembly code.
 
 
 Thus, I try with ```je 0x44```
-- ![image](https://hackmd.io/_uploads/HyuYNUfwC.png)
+- ![Disassembly je](images/Level11/disassembly_je.png)
 
 
 ***Change the byte at 0x555555555db7 to 84.***
-:::
+
 
 # Level 12
 Baby rev with a different layout.
@@ -972,7 +972,7 @@ int __fastcall interpret_sys(unsigned __int8 *a1, unsigned __int8 a2, unsigned _
 
 
 
-![image](https://hackmd.io/_uploads/rysildUu0.png)
+![Describe challenge](images/Level14/describe_challenge.png)
 - As you see, in function interpret_sys, it only call `[s] ... read_memory`, so I only notice it.
 
 ```cpp=
@@ -1177,7 +1177,7 @@ __int64 __fastcall execute_program(__int64 a1)
 - In this level, I must to make `v2 != 0` to get the flag.
 
 The difference between this level and the previous level is that function interpret_sys has options `[s] ... write` and `[s] ... exit`
-- ![image](https://hackmd.io/_uploads/SyRxudIu0.png)
+- ![New option](images/Level15/new_options.png)
 
 
 ```cpp=
@@ -1828,7 +1828,7 @@ In the next every stage, I notice that there is some similar region. I will take
   interpret_ldm((__int64)a1, 2u, 4u);           // a1[256] = a1[a1[257]]
 ```
 
-![image](https://hackmd.io/_uploads/HyKxVp8d0.png)
+![image](images/Level17/debug_code.png)
 
 ***Overall, it takes each bytes in my input and increases or decreases with the specified value.***
 
@@ -2540,15 +2540,15 @@ int __fastcall __noreturn main(int argc, const char **argv, const char **envp)
 
 It copies vm_code into dest after calling memset(make dest 0).
 
-- ![image](https://hackmd.io/_uploads/SkApakGKC.png)
+- ![vm_code](images/Level19/vm_code.png)
 
     - As you see, vm_code includes many bytes as the instruction byte for this program.
 
-- ![image](https://hackmd.io/_uploads/H1LqAJfK0.png)
+- ![vm_mem](images/Level19/vm_mem.png)
 
     - vm_mem has the unknown byte, so I check it in pwndbg
     
-        - ![image](https://hackmd.io/_uploads/Bk4x1xMYC.png)
+        - ![vm_mem pwndbg](images/Level19/vm_mem_pwndbg.png)
 
 
 
@@ -3071,3 +3071,219 @@ Here, I will conclude my supposition and guess the work of compare.
 ### [Script DEBUG](https://github.com/BabyBroder/pwncollege/blob/Program-Security/Reverse-Engineering/level19_1_DEBUG.py)
 
 ### [Script](https://github.com/BabyBroder/pwncollege/blob/Program-Security/Reverse-Engineering/level19_1.py)
+
+# Level 20 
+
+## 20.0
+
+In this level, vm_mem is not empty.
+
+![vm_mem](images/Level20/20.0/vm_mem.png)
+
+```antlr4=
+[+] v1 @ 0xdc
+[+] x | y @ 0x18004
+[V] a:0x0 b:0x30 c:0x22 d:0x5 s:0x3 i:0xdd f:0x0
+[I] op:0x80 arg1:0x4 arg2:0x1
+[*] SYS
+[s] SYS 0x4 d
+[s] ... read_memory
+input: aaaaaaaaaaaaaaaaaaaaaaaaaaaa
+[s] ... return value (in register d): 0x1c
+
+a1[1024] = 0x0 a1[1025] = 0x30 a1[1026] = 0x22 a1[1027] = 0x1c a1[1028] = 0x3 a1[1029] = 0xdd a1[1030] = 0x0 a1[1031] = 0x0 a1[1032] = 0x0 a1[1033] = 0x0
+```
+  input at index a1[768 + 0x30] ~ a1[816]
+
+```antlr4=
+
+[+] v1 @ 0x3
+[+] x | y @ 0xff0801
+[V] a:0x4c b:0xb8 c:0x1c d:0xc6 s:0x1 i:0x4 f:0x0
+[I] op:0x8 arg1:0x1 arg2:0xff
+[*] IMM
+IMM d = 0xff
+a1[1024] = 0x4c a1[1025] = 0xb8 a1[1026] = 0x1c a1[1027] = 0xff a1[1028] = 0x1 a1[1029] = 0x4 a1[1030] = 0x0 a1[1031] = 0x0 a1[1032] = 0x0 a1[1033] = 0x0
+
+        => a1[1027] = 0xff
+
+[+] v1 @ 0x4
+[+] x | y @ 0x14010
+[V] a:0x4c b:0xb8 c:0x1c d:0xff s:0x1 i:0x5 f:0x0
+[I] op:0x40 arg1:0x10 arg2:0x1
+[*] ADD
+[s] ADD a  d
+a1[1024] = 0x4b a1[1025] = 0xb8 a1[1026] = 0x1c a1[1027] = 0xff a1[1028] = 0x1 a1[1029] = 0x5 a1[1030] = 0x0 a1[1031] = 0x0 a1[1032] = 0x0 a1[1033] = 0x0
+
+v2 = a1[1024] = 0x4b
+v4 = a1[1027] = 0xff
+a1[1024] = v2 + v4
+
+        => a1[1024] += a1[1027]
+
+[+] v1 @ 0x5
+[+] x | y @ 0x14002
+[V] a:0x4b b:0xb8 c:0x1c d:0xff s:0x1 i:0x6 f:0x0
+[I] op:0x40 arg1:0x2 arg2:0x1
+[*] ADD
+[s] ADD b  d
+a1[1024] = 0x4b a1[1025] = 0xb7 a1[1026] = 0x1c a1[1027] = 0xff a1[1028] = 0x1 a1[1029] = 0x6 a1[1030] = 0x0 a1[1031] = 0x0 a1[1032] = 0x0 a1[1033] = 0x0
+
+v2 = a1[1025] = 0xb7
+v4 = a1[1027] = 0xff
+a1[1025] = v2 + v4
+
+        => a1[1025] += a1[1027]
+
+[+] v1 @ 0x6
+[+] x | y @ 0x100200
+[V] a:0x4b b:0xb7 c:0x1c d:0xff s:0x1 i:0x7 f:0x0
+[I] op:0x2 arg1:0x0 arg2:0x10
+[*] STK
+[s] STK N  a
+[s] ... pushing a
+a1[1024] = 0x4b a1[1025] = 0xb7 a1[1026] = 0x1c a1[1027] = 0xff a1[1028] = 0x2 a1[1029] = 0x7 a1[1030] = 0x0 a1[1031] = 0x0 a1[1032] = 0x0 a1[1033] = 0x0
+
+a1[1028]++
+v5 = a1[1024] = 0x4b
+index = a1[1028]
+a1[index + 768] = v5
+
+        => a1[770] = 0x4b
+
+[+] v1 @ 0x7
+[+] x | y @ 0x20200
+[V] a:0x4b b:0xb7 c:0x1c d:0xff s:0x2 i:0x8 f:0x0
+[I] op:0x2 arg1:0x0 arg2:0x2
+[*] STK
+[s] STK N  b
+[s] ... pushing b
+a1[1024] = 0x4b a1[1025] = 0xb7 a1[1026] = 0x1c a1[1027] = 0xff a1[1028] = 0x3 a1[1029] = 0x8 a1[1030] = 0x0 a1[1031] = 0x0 a1[1032] = 0x0 a1[1033] = 0x0
+
+
+a1[1028]++
+v5 = a1[1025] = 0xb7
+index = a1[1028]
+a1[index + 768] = v5
+
+        => a1[771] = 0x4b
+
+[+] v1 @ 0x8
+[+] x | y @ 0x102010
+[V] a:0x4b b:0xb7 c:0x1c d:0xff s:0x3 i:0x9 f:0x0
+[I] op:0x20 arg1:0x10 arg2:0x10
+[*] LDM
+[s] LDM a = *a
+[*] v4 @ 0x4b
+[*] memory @ 0x7
+a1[1024] = 0x7 a1[1025] = 0xb7 a1[1026] = 0x1c a1[1027] = 0xff a1[1028] = 0x3 a1[1029] = 0x9 a1[1030] = 0x0 a1[1031] = 0x0 a1[1032] = 0x0 a1[1033] = 0x0
+
+v4 = a1[1024] = 0x4b
+memory = a1[768 +v4] = a1[843]
+a1[1024] = memory
+
+        => a1[1024] = a1[843]
+
+[+] v1 @ 0x9
+[+] x | y @ 0x22002
+[V] a:0x7 b:0xb7 c:0x1c d:0xff s:0x3 i:0xa f:0x0
+[I] op:0x20 arg1:0x2 arg2:0x2
+[*] LDM
+[s] LDM b = *b
+[*] v4 @ 0xb7
+[*] memory @ 0x62
+a1[1024] = 0x7 a1[1025] = 0x62 a1[1026] = 0x1c a1[1027] = 0xff a1[1028] = 0x3 a1[1029] = 0xa a1[1030] = 0x0 a1[1031] = 0x0 a1[1032] = 0x0 a1[1033] = 0x0
+
+v4 = a1[1025] = 0xb7
+memory = a1[768 +v4] = a1[951]
+a1[1024] = memory
+
+        => a1[1025] = a1[951]
+
+[+] v1 @ 0xa
+[+] x | y @ 0x20410
+[V] a:0x7 b:0x62 c:0x1c d:0xff s:0x3 i:0xb f:0x0
+[I] op:0x4 arg1:0x10 arg2:0x2
+[*] CMP
+[s] CMP a = b
+a1[1024] = 0x7 a1[1025] = 0x62 a1[1026] = 0x1c a1[1027] = 0xff a1[1028] = 0x3 a1[1029] = 0xb a1[1030] = 0x3 a1[1031] = 0x0 a1[1032] = 0x0 a1[1033] = 0x0
+
+compare a1[1024] and a1[1025]
+
+<=> compare a1[843] and a1[951]
+```
+
+In this level, I can use the same trick to solve this challenge as in the previous level. However, in the previous challenge, I knew that my input remains unchanged and is compared with the license key, so to solve the problem quickly, I write some code to find each key ╰(*°▽°*)╯. Now, I can also calculate the distance between my input and the value of my input after changing it and the license key I get; and I can solve this successfully, but I don't do this; I'm legit (●'◡'●).
+
+I get one of the changes my input, and the others are the same.
+
+```antlr4=
+[+] v1 @ 0xa1
+[+] x | y @ 0x4b0810
+[V] a:0x4a b:0x36 c:0xd5 d:0x1c s:0x3 i:0xa2 f:0x0
+[I] op:0x8 arg1:0x10 arg2:0x4b
+[*] IMM
+IMM a = 0x4b
+a1[1024] = 0x4b a1[1025] = 0x36 a1[1026] = 0xd5 a1[1027] = 0x1c a1[1028] = 0x3 a1[1029] = 0xa2 a1[1030] = 0x0 a1[1031] = 0x0 a1[1032] = 0x0 a1[1033] = 0x0
+
+		=> a1[1024] = 0x4b
+
+[+] v1 @ 0xa2
+[+] x | y @ 0xa60840
+[V] a:0x4b b:0x36 c:0xd5 d:0x1c s:0x3 i:0xa3 f:0x0
+[I] op:0x8 arg1:0x40 arg2:0xa6
+[*] IMM
+IMM c = 0xa6
+a1[1024] = 0x4b a1[1025] = 0x36 a1[1026] = 0xa6 a1[1027] = 0x1c a1[1028] = 0x3 a1[1029] = 0xa3 a1[1030] = 0x0 a1[1031] = 0x0 a1[1032] = 0x0 a1[1033] = 0x0
+
+		=> a1[1026] = 0xa6
+
+[+] v1 @ 0xa3
+[+] x | y @ 0x102002
+[V] a:0x4b b:0x36 c:0xa6 d:0x1c s:0x3 i:0xa4 f:0x0
+[I] op:0x20 arg1:0x2 arg2:0x10
+[*] LDM
+[s] LDM b = *a
+[*] v4 @ 0x4b
+[*] memory @ 0x61
+a1[1024] = 0x4b a1[1025] = 0x61 a1[1026] = 0xa6 a1[1027] = 0x1c a1[1028] = 0x3 a1[1029] = 0xa4 a1[1030] = 0x0 a1[1031] = 0x0 a1[1032] = 0x0 a1[1033] = 0x0
+
+v4 = a1[1024] = 0x4b
+memory = a1[768 + v4] = a1[843]
+a1[1025] = memory 
+		=> a1[1025] = a1[843]
+
+[+] v1 @ 0xa4
+[+] x | y @ 0x404002
+[V] a:0x4b b:0x61 c:0xa6 d:0x1c s:0x3 i:0xa5 f:0x0
+[I] op:0x40 arg1:0x2 arg2:0x40
+[*] ADD
+[s] ADD b  c
+a1[1024] = 0x4b a1[1025] = 0x7 a1[1026] = 0xa6 a1[1027] = 0x1c a1[1028] = 0x3 a1[1029] = 0xa5 a1[1030] = 0x0 a1[1031] = 0x0 a1[1032] = 0x0 a1[1033] = 0x0
+
+v2 = a1[1025] = 0x61
+v4 = a1[1026] = 0xa6
+a1[1025] = v2 + v4
+		=> a1[1025] = a1[1025] + a1[1026]
+
+[+] v1 @ 0xa5
+[+] x | y @ 0x21010
+[V] a:0x4b b:0x7 c:0xa6 d:0x1c s:0x3 i:0xa6 f:0x0
+[I] op:0x10 arg1:0x10 arg2:0x2
+[*] STM
+[s] STM *a = b
+a1[1024] = 0x4b a1[1025] = 0x7 a1[1026] = 0xa6 a1[1027] = 0x1c a1[1028] = 0x3 a1[1029] = 0xa6 a1[1030] = 0x0 a1[1031] = 0x0 a1[1032] = 0x0 a1[1033] = 0x0
+
+v2 = a1[1025] = 0x7
+v4 = a1[1024] = 0x4b
+index = v4 = 0x4b
+a1[index + 768] = v2
+		=> a1[843] = a1[1025]
+```
+
+  IMM a = 0x4b (get index)→ IMM c = 0xa6 (get value to add ~ distance) → [s] LDM b = *a (init value at index 0x4b) → [s] ADD b  c (add distance) → [s] STM *a = b (store value after changes to old index) 
+
+```python
+value_add = [0x48, 0x9c, 0xa , 0x9a , 0x3f , 0x41 ,0x93, 0x94 ,0xac , 0xd4,0x72 ,0xdd ,0x5a ,0x7, 0xc6, 0x90,0xa2,0xc0 ,0xdd,0x37, 0xa4,0x4,0x22, 0x9c, 0xad, 0xc2, 0xd5, 0xa6]
+```
+
