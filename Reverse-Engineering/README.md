@@ -3290,3 +3290,9 @@ value_add = [0x48, 0x9c, 0xa , 0x9a , 0x3f , 0x41 ,0x93, 0x94 ,0xac , 0xd4,0x72 
 ```
 
 ### [Script](https://github.com/BabyBroder/pwncollege/blob/Program-Security/Reverse-Engineering/src/level20.py) 
+
+## 20.1
+
+### [Script DEBUG](https://github.com/BabyBroder/pwncollege/blob/Program-Security/Reverse-Engineering/src/level20_1_DEBUG.py)
+
+### [Script](https://github.com/BabyBroder/pwncollege/blob/Program-Security/Reverse-Engineering/src/level20_1.py)
