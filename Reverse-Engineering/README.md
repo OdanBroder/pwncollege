@@ -110,7 +110,7 @@ for i in range(len(hex)):
 +Xor value at odd index with 0xBA and even index at 0x5E.
 
 
-### [Script](https://github.com/BabyBroder/pwncollege/blob/Program-Security/Reverse-Engineering/level6_1.py)
+### [Script](https://github.com/BabyBroder/pwncollege/blob/Program-Security/Reverse-Engineering/src/level6_1.py)
 # Level 7
 
 ## 7.1
@@ -156,7 +156,7 @@ sort
     }
   }
 ```
-### [Script](https://github.com/BabyBroder/pwncollege/blob/Program-Security/Reverse-Engineering/level7_1.py)
+### [Script](https://github.com/BabyBroder/pwncollege/blob/Program-Security/Reverse-Engineering/src/level7_1.py)
 
 # Level 8
 
@@ -659,10 +659,10 @@ Baby rev with a different layout.
 
 ## 12.0
 
-### [Script](https://github.com/BabyBroder/pwncollege/blob/Program-Security/Reverse-Engineering/level12.py)
+### [Script](https://github.com/BabyBroder/pwncollege/blob/Program-Security/Reverse-Engineering/src/level12.py)
 
 ## 12.1
-### [Script](https://github.com/BabyBroder/pwncollege/blob/Program-Security/Reverse-Engineering/level12_1.py)
+### [Script](https://github.com/BabyBroder/pwncollege/blob/Program-Security/Reverse-Engineering/src/level12_1.py)
 
 # Level 13
 
@@ -893,13 +893,13 @@ _BYTE *__fastcall interpret_add(unsigned __int8 *a1, char a2, char a3)
 
 ***Debug in gdb to get the informations and write them to script***
 
-### [Script](https://github.com/BabyBroder/pwncollege/blob/Program-Security/Reverse-Engineering/level13.py)
+### [Script](https://github.com/BabyBroder/pwncollege/blob/Program-Security/Reverse-Engineering/src/level13.py)
 
 ## 13.1
 
 - It is totally similar to 13.0, so I use trick to solve quickly this level.
 
-### [Script](https://github.com/BabyBroder/pwncollege/blob/Program-Security/Reverse-Engineering/level13_1.py)
+### [Script](https://github.com/BabyBroder/pwncollege/blob/Program-Security/Reverse-Engineering/src/level13_1.py)
 
 # Level 14
 
@@ -996,10 +996,10 @@ ssize_t __fastcall sys_read(__int64 a1, int a2, void *a3, size_t a4)
 
 ***In this level, this function will take my input, whose length is v5(a1[258]) and save it into the array a1, from index 257.***
 
-### [Script](https://github.com/BabyBroder/pwncollege/blob/Program-Security/Reverse-Engineering/level14.py)
+### [Script](https://github.com/BabyBroder/pwncollege/blob/Program-Security/Reverse-Engineering/src/level14.py)
 ## 14.1
 
-### [Script](https://github.com/BabyBroder/pwncollege/blob/Program-Security/Reverse-Engineering/level14_1.py)
+### [Script](https://github.com/BabyBroder/pwncollege/blob/Program-Security/Reverse-Engineering/src/level14_1.py)
 
 # Level 15
 
@@ -1202,10 +1202,10 @@ The difference between this level and the previous level is that function interp
 - It writes the value at index a1[257] of array a1 with length 1 to stdout 
 
 
-### [Script](https://github.com/BabyBroder/pwncollege/blob/Program-Security/Reverse-Engineering/level15.py)
+### [Script](https://github.com/BabyBroder/pwncollege/blob/Program-Security/Reverse-Engineering/src/level15.py)
 
 ## 15.1
-### [Script](https://github.com/BabyBroder/pwncollege/blob/Program-Security/Reverse-Engineering/level15_1.py)
+### [Script](https://github.com/BabyBroder/pwncollege/blob/Program-Security/Reverse-Engineering/src/level15_1.py)
 
 # Level 16
 
@@ -1530,10 +1530,10 @@ To get the flag, I need to have make `v2 != 0`
 
 After this level makes a license key, it has the value at index 0x94 → 0x9A. I can get them by reversing. And the value 0x74 → 0x7A is my input.
 
-### [Script](https://github.com/BabyBroder/pwncollege/blob/Program-Security/Reverse-Engineering/level16.py)
+### [Script](https://github.com/BabyBroder/pwncollege/blob/Program-Security/Reverse-Engineering/src/level16.py)
 
 ## 16.1
-### [Script](https://github.com/BabyBroder/pwncollege/blob/Program-Security/Reverse-Engineering/level16_1.py)
+### [Script](https://github.com/BabyBroder/pwncollege/blob/Program-Security/Reverse-Engineering/src/level16_1.py)
 
 # Level 17
 
@@ -1565,7 +1565,7 @@ return write_memory((__int64)a1, v5, (char)v3);
 
 So, let's modify the script a little
 
-### [Script](https://github.com/BabyBroder/pwncollege/blob/Program-Security/Reverse-Engineering/level17.py)
+### [Script](https://github.com/BabyBroder/pwncollege/blob/Program-Security/Reverse-Engineering/src/level17.py)
 
 
 
@@ -1832,7 +1832,7 @@ In the next every stage, I notice that there is some similar region. I will take
 
 ***Overall, it takes each bytes in my input and increases or decreases with the specified value.***
 
-### [Script](https://github.com/BabyBroder/pwncollege/blob/Program-Security/Reverse-Engineering/level17_1.py)
+### [Script](https://github.com/BabyBroder/pwncollege/blob/Program-Security/Reverse-Engineering/src/level17_1.py)
 
 # Level 18
 
@@ -2133,7 +2133,7 @@ interpret_ldm(a1, 32, 32)
 interpret_cmp(a1, 32, 4)
 ```
 
-### [Script](https://github.com/BabyBroder/pwncollege/blob/Program-Security/Reverse-Engineering/level18.py)
+### [Script](https://github.com/BabyBroder/pwncollege/blob/Program-Security/Reverse-Engineering/src/level18.py)
 
 
 ## 18.1
@@ -2470,7 +2470,7 @@ interpret_cmp(a1, 1, 32)
 
 ```
 
-### [Script](https://github.com/BabyBroder/pwncollege/blob/Program-Security/Reverse-Engineering/level18_1.py)
+### [Script](https://github.com/BabyBroder/pwncollege/blob/Program-Security/Reverse-Engineering/src/level18_1.py)
 
 # Level 19
 
@@ -2615,7 +2615,7 @@ It takes the byte instruction to call the respective function.
 I spent many times thinking about the approach to solving this level and writing a script for it.
 
 
-### [Script DEBUG](https://github.com/BabyBroder/pwncollege/blob/Program-Security/Reverse-Engineering/level19_DEBUG.py)
+### [Script DEBUG](https://github.com/BabyBroder/pwncollege/blob/Program-Security/Reverse-Engineering/src/level19_DEBUG.py)
 
 ```antlr4=
 [+] v1 @ 0xb6
@@ -3064,13 +3064,13 @@ Here, I will conclude my supposition and guess the work of compare.
 
 - This loop is has the rule, I follow with this and have the license key.
 
-### [Script](https://github.com/BabyBroder/pwncollege/blob/Program-Security/Reverse-Engineering/level19.py)
+### [Script](https://github.com/BabyBroder/pwncollege/blob/Program-Security/Reverse-Engineering/src/level19.py)
 
 ## 19.1 
 
-### [Script DEBUG](https://github.com/BabyBroder/pwncollege/blob/Program-Security/Reverse-Engineering/level19_1_DEBUG.py)
+### [Script DEBUG](https://github.com/BabyBroder/pwncollege/blob/Program-Security/Reverse-Engineering/src/level19_1_DEBUG.py)
 
-### [Script](https://github.com/BabyBroder/pwncollege/blob/Program-Security/Reverse-Engineering/level19_1.py)
+### [Script](https://github.com/BabyBroder/pwncollege/blob/Program-Security/Reverse-Engineering/src/level19_1.py)
 
 # Level 20 
 
