@@ -3080,6 +3080,8 @@ In this level, vm_mem is not empty.
 
 ![vm_mem](images/Level20/vm_mem.png)
 
+
+### [Script DEBUG](https://github.com/BabyBroder/pwncollege/blob/Program-Security/Reverse-Engineering/src/level20_DEBUG.py) 
 ```antlr4=
 [+] v1 @ 0xdc
 [+] x | y @ 0x18004
