@@ -3300,7 +3300,8 @@ value_add = [0x48, 0x9c, 0xa , 0x9a , 0x3f , 0x41 ,0x93, 0x94 ,0xac , 0xd4,0x72 
 
 ## 21.0
 In this level, I create yan code to get the flag
-![main](/images/Level21/main.png)
+
+![main](images/Level21/main.png)
 ### [Script DEBUG](https://github.com/BabyBroder/pwncollege/blob/Program-Security/Reverse-Engineering/src/level21_DEBUG.py)
 ### [Script](https://github.com/BabyBroder/pwncollege/blob/Program-Security/Reverse-Engineering/src/level21.py)
 
